@@ -16,16 +16,13 @@ class Illustration(Simulation):
         self.center_position = np.array([0,0])
         self.g_acceleration = np.array([0,-9.8])
 
-        self.realistic_parameter()
-        super().initialize()
+        self.initialize()
         #Render
         self.camspeed = 1
         self.realtime_animation = False
         self.frames = 5
         self.substep = 20
-        self.collision_coefficient = 0.9
         self.scatter_size = 567*self.smoothing_radius*2**(-np.min(self.bound))
-        self.setup_position()
 
     def illustrate(self):
         self.Dt = 0.1*self.camspeed

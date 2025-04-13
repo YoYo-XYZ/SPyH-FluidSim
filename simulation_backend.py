@@ -1,6 +1,6 @@
 import numpy as np
 
-class Simattr:
+class Phyattr:
     def __init__(self):
         #particle
         self.smoothing_radius = 0.1
@@ -14,32 +14,36 @@ class Simattr:
         self.g = 9.86
         self.sound_speed = 343000
 
-        #boundary wall
-        self.collision_coiff = 0.95
-
-class Simulation(Simattr):
+class Simattr:
     def __init__(self):
-        super().__init__()
-        #spatial space variables
+        #particle init variables
+        self.v_init = np.array([0,0])
         self.center_position = np.array([0,0])
         self.x_center = self.center_position[0]
         self.y_center = self.center_position[1]
         self.particle_amount_x = 5
         self.particle_amount_y = 5
-        self.particle_amount = self.particle_amount_x*self.particle_amount_y
+
+        #physcial boundary variables
+        self.collision_coiff = 0.95
         self.bound = [2.5,2.5]
 
-        #simulation variables
+        #simulation config variables
         self.Dt = 0.1
         self.substep = 10
-        self.collision_coefficient = 0.95
         self.time = 0
         self.g_acceleration = np.array([0,-self.g])
-        self.v_init = np.array([0,0])
+
+
+class Simulation(Phyattr, Simattr):
+    def __init__(self):
+        Phyattr.__init__(self)
+        Simattr.__init__(self)
 
     def initialize(self):
         self.particle_amount = self.particle_amount_x * self.particle_amount_y
 
+        print(self.v_init)
         #position dynamics variables
         self.p_list = np.array([])
         self.v_list = np.array([self.v_init for i in range(0,self.particle_amount)])
@@ -47,17 +51,15 @@ class Simulation(Simattr):
         self.rho_list = np.ones(self.particle_amount)
         self.g_list = np.array([self.g_acceleration for i in range(0,self.particle_amount)])
 
+        self.realistic_parameter()
         self.setup_position()
 
+#-----------------Setup Initialize method-------------
     def realistic_parameter(self):
         self.mass = 4/3*np.pi*(2*self.smoothing_radius)**3/self.particle_amount
-        self.x_gap = 2*self.smoothing_radius
-        self.y_gap = 2*self.smoothing_radius
-#-----------------Setup-----------------
-    #set up the initial position
     def setup_position(self):
-        self.x_gap = 1.98*self.smoothing_radius
-        self.y_gap = 1.98*self.smoothing_radius
+        self.x_gap = 1.99*self.smoothing_radius
+        self.y_gap = 1.99*self.smoothing_radius
 
         self.p_list = np.array([self.center_position+np.array([self.x_gap*(x - ((self.particle_amount_x-1)/2)), self.y_gap*(y - ((self.particle_amount_y-1)/2)) ])
         for x in range(0,self.particle_amount_x)
@@ -66,11 +68,6 @@ class Simulation(Simattr):
 
     def setup_random(self):
         self.p_list = np.random.rand(self.particle_amount,2)-np.array([[0.5,0.5]])
-
-    #type II boundary particlle
-    def generate_boundary_particle(self):
-
-        bound_p_list = np.array([np.array([self])])
 
 #-----------------Linked List Algorithm-------------------
     def generate_key(self):
