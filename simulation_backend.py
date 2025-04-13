@@ -1,8 +1,25 @@
 import numpy as np
 
-
-class Simulation:
+class Simattr:
     def __init__(self):
+        #particle
+        self.smoothing_radius = 0.1
+        self.kernelfunction = 'bspline'
+        self.rho = 1
+        self.mass = 1
+
+        #governing physics
+        self.gamma = 7
+        self.viscosity = 1
+        self.g = 9.86
+        self.sound_speed = 343000
+
+        #boundary wall
+        self.collision_coiff = 0.95
+
+class Simulation(Simattr):
+    def __init__(self):
+        super().__init__()
         #spatial space variables
         self.center_position = np.array([0,0])
         self.x_center = self.center_position[0]
@@ -12,27 +29,16 @@ class Simulation:
         self.particle_amount = self.particle_amount_x*self.particle_amount_y
         self.bound = [2.5,2.5]
 
-        #physical property
-        self.mass = 1
-        self.smoothing_radius = 0.1
-        self.viscosity = 1
-        self.gamma = 7
-
-        #simulation parameter variables
+        #simulation variables
         self.Dt = 0.1
         self.substep = 10
         self.collision_coefficient = 0.95
-        self.pressure_multiplier = 10
         self.time = 0
-
-        self.g_acceleration = np.array([0,-9.8])
+        self.g_acceleration = np.array([0,-self.g])
         self.v_init = np.array([0,0])
 
     def initialize(self):
         self.particle_amount = self.particle_amount_x * self.particle_amount_y
-
-        #display property
-        self.r_display = (self.mass/(4*np.pi))**(1/3)
 
         #position dynamics variables
         self.p_list = np.array([])
@@ -45,8 +51,8 @@ class Simulation:
 
     def realistic_parameter(self):
         self.mass = 4/3*np.pi*(2*self.smoothing_radius)**3/self.particle_amount
-        self.x_gap = 1.98*self.smoothing_radius
-        self.y_gap = 1.98*self.smoothing_radius
+        self.x_gap = 2*self.smoothing_radius
+        self.y_gap = 2*self.smoothing_radius
 #-----------------Setup-----------------
     #set up the initial position
     def setup_position(self):
@@ -138,7 +144,7 @@ class Simulation:
         for i in range(0,self.particle_amount):
             for j in self.nearby_index_list[i]:
                 if j>i:
-                    self.rho_av_list[i][j]=(34300**2/self.gamma*(self.rho_list[i]**self.gamma+self.rho_list[j]**self.gamma-2))/(self.rho_list[i]*self.rho_list[j])
+                    self.rho_av_list[i][j]=(self.sound_speed**2/self.gamma*(self.rho_list[i]**self.gamma+self.rho_list[j]**self.gamma-2))/(self.rho_list[i]*self.rho_list[j])
 
 
         x = self.rho_av_list.reshape(self.rho_av_list.shape+(1,))*self.grad_kernel_list
