@@ -1,6 +1,6 @@
 import numpy as np
 
-class Phyattr:
+class Physattr:
     def __init__(self):
         #particle
         self.smoothing_radius = 0.1
@@ -14,8 +14,9 @@ class Phyattr:
         self.g = 9.86
         self.sound_speed = 343000
 
-class Simattr:
+class Simattr(Physattr):
     def __init__(self):
+        super().__init__()
         #particle init variables
         self.v_init = np.array([0,0])
         self.center_position = np.array([0,0])
@@ -25,7 +26,7 @@ class Simattr:
         self.particle_amount_y = 5
 
         #physcial boundary variables
-        self.collision_coiff = 0.95
+        self.collision_coefficient = 0.95
         self.bound = [2.5,2.5]
 
         #simulation config variables
@@ -35,15 +36,13 @@ class Simattr:
         self.g_acceleration = np.array([0,-self.g])
 
 
-class Simulation(Phyattr, Simattr):
+class Simulation(Simattr):
     def __init__(self):
-        Phyattr.__init__(self)
-        Simattr.__init__(self)
+        super().__init__()
 
     def initialize(self):
         self.particle_amount = self.particle_amount_x * self.particle_amount_y
 
-        print(self.v_init)
         #position dynamics variables
         self.p_list = np.array([])
         self.v_list = np.array([self.v_init for i in range(0,self.particle_amount)])
