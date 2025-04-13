@@ -30,7 +30,7 @@ class Illustration(Simulation):
         self.Dt = 0.1*self.camspeed
         bound = self.bound
         fig, ax = plt.subplots()
-        scat = ax.scatter(self.p_list[:, 0], self.p_list[:, 1], c=np.linalg.norm(self.v_list,axis=1), cmap='rainbow', s=567*self.smoothing_radius, alpha=1 , vmin=0, vmax=8)
+        scat = ax.scatter(self.p_list[:, 0], self.p_list[:, 1], c=np.linalg.norm(self.v_list,axis=1), cmap='rainbow', s=600*self.smoothing_radius, alpha=1 , vmin=0, vmax=8)
         plt.colorbar(scat, label='Speed')
         fig.legend([f'viscosity = {self.viscosity}'])
 
@@ -61,7 +61,7 @@ class Illustration(Simulation):
     def illustrate_setup(self):
         bound = self.bound
         fig, ax = plt.subplots()
-        scat = ax.scatter(self.p_list[:, 0], self.p_list[:, 1], c=np.linalg.norm(self.v_list,axis=1), cmap='rainbow', s=567*self.smoothing_radius, alpha=1 , vmin=0, vmax=8)
+        scat = ax.scatter(self.p_list[:, 0], self.p_list[:, 1], c=np.linalg.norm(self.v_list,axis=1), cmap='rainbow', s=600*self.smoothing_radius, alpha=1 , vmin=0, vmax=8)
         plt.colorbar(scat, label='Speed')
         fig.legend([f'viscosity = {self.viscosity}'])
 

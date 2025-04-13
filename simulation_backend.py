@@ -1,5 +1,6 @@
 import numpy as np
 
+
 class Simulation:
     def __init__(self):
         #spatial space variables
@@ -126,19 +127,18 @@ class Simulation:
 
         self.v_dif_list = self.v_dif_list - np.transpose(self.v_dif_list,(1,0,2))
 
-        self.gamma=self.v_dif_list/self.rho_list.reshape((1,)+self.rho_list.shape+(1,))
+        self.alpha=self.v_dif_list/self.rho_list.reshape((1,)+self.rho_list.shape+(1,))
 
-        self.x = np.einsum('ijk,ijk->ij', self.gamma, self.grad_kernel_list - np.transpose(self.grad_kernel_list,(1,0,2)))
+        self.x = np.einsum('ijk,ijk->ij', self.alpha, self.grad_kernel_list - np.transpose(self.grad_kernel_list,(1,0,2)))
         self.rho_div_list = self.mass*self.rho_list*np.sum(self.x,axis=1)
 
     def v_div_cal(self):
         #pressure force
-
         self.rho_av_list = np.zeros([self.particle_amount,self.particle_amount])
         for i in range(0,self.particle_amount):
             for j in self.nearby_index_list[i]:
                 if j>i:
-                    self.rho_av_list[i][j]=(34300**2/1*(self.rho_list[i]**1+self.rho_list[j]**1-2))/(self.rho_list[i]*self.rho_list[j])
+                    self.rho_av_list[i][j]=(34300**2/self.gamma*(self.rho_list[i]**self.gamma+self.rho_list[j]**self.gamma-2))/(self.rho_list[i]*self.rho_list[j])
 
 
         x = self.rho_av_list.reshape(self.rho_av_list.shape+(1,))*self.grad_kernel_list
