@@ -22,12 +22,12 @@ class Illustration(Simulation):
         self.realtime_animation = False
         self.frames = 5
         self.substep = 20
-        self.scatter_size = 567*self.smoothing_radius*2**(-np.min(self.bound))
 
     def illustrate(self):
         self.Dt = 0.1*self.camspeed
         bound = self.bound
         fig, ax = plt.subplots()
+        self.scatter_size = self.smoothing_radius*5670*bound[0]**-2
         scat = ax.scatter(self.p_list[:, 0], self.p_list[:, 1], c=np.linalg.norm(self.v_list,axis=1), cmap='rainbow', s=self.scatter_size, alpha=1 , vmin=0, vmax=8)
         plt.colorbar(scat, label='Speed')
         fig.legend([f'viscosity = {self.viscosity}'])
