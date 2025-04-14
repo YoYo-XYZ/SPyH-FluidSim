@@ -11,8 +11,8 @@ class Physattr:
         #governing physics
         self.gamma = 7
         self.viscosity = 1
-        self.g = 9.86
-        self.sound_speed = 343000
+        self.g = 986
+        self.sound_speed = 34300
 
 class Simattr(Physattr):
     def __init__(self):
@@ -55,7 +55,7 @@ class Simulation(Simattr):
 
 #-----------------Setup Initialize method-------------
     def realistic_parameter(self):
-        self.mass = 4/3*np.pi*(2*self.smoothing_radius)**3/self.particle_amount
+        self.mass = self.rho*4/3*np.pi*(2*self.smoothing_radius)**3
     def setup_position(self):
         self.x_gap = 1.99*self.smoothing_radius
         self.y_gap = 1.99*self.smoothing_radius
@@ -148,13 +148,13 @@ class Simulation(Simattr):
 
         #viscosity force
         y = np.nan_to_num(np.linalg.norm(self.grad_kernel_list,axis = 2)/(self.dsize_list*self.rho_list.reshape((1,)+self.rho_list.shape)),nan=0)
-        coif = self.mass*2*self.rho_list*self.viscosity
+        coif = 2*self.rho_list*self.viscosity
         yy=self.v_dif_list*y.reshape(y.shape+(1,))
         yy = yy - np.transpose(yy,(1,0,2))
         self.vis_force_list = coif.reshape(coif.shape+(1,))*np.sum(yy,axis=1)
 
         #net force
-        self.v_div_list = self.mass*np.sum(x,axis=1) + self.g_acceleration + self.vis_force_list
+        self.v_div_list = self.mass*(np.sum(x,axis=1)+self.vis_force_list) + self.g_acceleration
 
 #-----------------Time Integration Methods-------------------
 

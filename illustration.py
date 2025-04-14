@@ -31,6 +31,8 @@ class Illustration(Simulation):
         scat = ax.scatter(self.p_list[:, 0], self.p_list[:, 1], c=np.linalg.norm(self.v_list,axis=1), cmap='rainbow', s=self.scatter_size, alpha=1 , vmin=0, vmax=8)
         plt.colorbar(scat, label='Speed')
         fig.legend([f'viscosity = {self.viscosity}'])
+        plt.xlabel("x (m)")
+        plt.ylabel("y (m)")
 
         #animation computation
         ax.set_xlim(-bound[0], bound[0])
