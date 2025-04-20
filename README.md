@@ -19,10 +19,6 @@ This project is a 2D fluid dynamics simulator based on **Smoothed Particle Hydro
 
 ## 🖼️ GUI Preview
 
-<p align="center">
-  <img src="https://via.placeholder.com/600x400.png?text=SPH+GUI+Simulation+Placeholder" alt="GUI Screenshot"/>
-</p>
-
 ---
 
 ## 📦 Project Structure
@@ -34,8 +30,6 @@ This project is a 2D fluid dynamics simulator based on **Smoothed Particle Hydro
 ├── simulation_backend.py  # Core SPH logic and physics engine
 ├── illustration.py         # (Expected to contain Matplotlib plotting functions)
 ```
-
-> **Note**: The file `illustration.py` is assumed to define `Illustration`, which handles visualization logic (not included here).
 
 ---
 
