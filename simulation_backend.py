@@ -2,22 +2,23 @@ import numpy as np
 
 class Physattr:
     def __init__(self):
-        #particle
+        # particle properties
         self.smoothing_radius = 0.1
-        self.kernelfunction = 'bspline'
-        self.rho = 1
-        self.mass = 1
+        self.h = self.smoothing_radius
+        self.kernelfunction = 'bspline' # currently only bspline
+        self.rho = 1.0 #reference density
+        self.mass = 1.0
 
-        #governing physics
-        self.gamma = 7
-        self.viscosity = 1
-        self.g = 986
-        self.sound_speed = 34300
+        # governing physics
+        self.gamma = 7.0
+        self.viscosity = 1.0
+        self.g = 981.0
+        self.sound_speed = 34300.0
 
 class Simattr(Physattr):
     def __init__(self):
         super().__init__()
-        #particle init variables
+        # particle spatial variables
         self.v_init = np.array([0,0])
         self.center_position = np.array([0,0])
         self.x_center = self.center_position[0]
@@ -25,11 +26,11 @@ class Simattr(Physattr):
         self.particle_amount_x = 5
         self.particle_amount_y = 5
 
-        #physcial boundary variables
+        # physcial boundary variables
         self.collision_coefficient = 0.95
         self.bound = [2.5,2.5]
 
-        #simulation config variables
+        # simulation config variables
         self.Dt = 0.1
         self.substep = 10
         self.time = 0
@@ -55,10 +56,10 @@ class Simulation(Simattr):
 
 #-----------------Setup Initialize method-------------
     def realistic_parameter(self):
-        self.mass = self.rho*4/3*np.pi*(2*self.smoothing_radius)**3
+        self.mass = self.rho*4/3*np.pi*(2*self.h)**3
     def setup_position(self):
-        self.x_gap = 1.99*self.smoothing_radius
-        self.y_gap = 1.99*self.smoothing_radius
+        self.x_gap = 1.99*self.h
+        self.y_gap = 1.99*self.h
 
         self.p_list = np.array([self.center_position+np.array([self.x_gap*(x - ((self.particle_amount_x-1)/2)), self.y_gap*(y - ((self.particle_amount_y-1)/2)) ])
         for x in range(0,self.particle_amount_x)
@@ -70,7 +71,7 @@ class Simulation(Simattr):
 
 #-----------------Linked List Algorithm-------------------
     def generate_key(self):
-        self.key_list = np.round(self.p_list/(2*self.smoothing_radius)).astype(int)
+        self.key_list = np.round(self.p_list/(2*self.h)).astype(int)
         #print(self.key_list)
 
     def search_nearby_index(self, target_index):
@@ -109,15 +110,15 @@ class Simulation(Simattr):
         self.dsize_list = np.linalg.norm(self.dvec_list,axis=2)
 
         #secondary variables
-        self.r = self.dsize_list/self.smoothing_radius
+        self.r = self.dsize_list/self.h
         self.normvec = np.nan_to_num(self.dvec_list/self.dsize_list.reshape(self.r.shape + (1,)),nan=0)
 
     def kernel_cal(self):
-        self.kernel_list = 3*(2*np.pi*self.smoothing_radius)*np.select([self.r==0,(self.r>0) & (self.r<1), (self.r>=1) & (self.r<2), self.r>=2], [0,2/3-self.r**2+1/2*self.r**3, (2-self.r)**3/6, 0])
+        self.kernel_list = 3*(2*np.pi*self.h)*np.select([self.r==0,(self.r>0) & (self.r<1), (self.r>=1) & (self.r<2), self.r>=2], [0,2/3-self.r**2+1/2*self.r**3, (2-self.r)**3/6, 0])
         
     def grad_kernel_cal(self):
         x=np.select([self.r==0,(self.r>0) & (self.r<1), (self.r>=1) & (self.r<2), self.r>=2], [0,-2*self.r+3/2*self.r**2, -0.5*(2-self.r)**2, 0])
-        self.grad_kernel_list = 3*(2*np.pi*self.smoothing_radius)*self.normvec*x.reshape(x.shape+(1,))
+        self.grad_kernel_list = 3*(2*np.pi*self.h)*self.normvec*x.reshape(x.shape+(1,))
 
     def rho_div_cal(self):
 
