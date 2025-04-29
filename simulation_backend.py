@@ -1,5 +1,5 @@
 import numpy as np
-
+from neighbor_search import _get_neighbor_cells
 class Physattr:
     def __init__(self):
         # particle properties
@@ -35,8 +35,6 @@ class Simattr(Physattr):
         self.substep = 10
         self.time = 0
         self.g_acceleration = np.array([0,-self.g])
-
-
 class Simulation(Simattr):
     def __init__(self):
         super().__init__()
@@ -53,6 +51,8 @@ class Simulation(Simattr):
 
         self.realistic_parameter()
         self.setup_position()
+        self.cell_size = 2*self.h
+        self.cell_x = int(2*self.bound[0]/self.cell_size)
 
 #-----------------Setup Initialize method-------------
     def realistic_parameter(self):
@@ -69,41 +69,13 @@ class Simulation(Simattr):
     def setup_random(self):
         self.p_list = np.random.rand(self.particle_amount,2)-np.array([[0.5,0.5]])
 
-#-----------------Linked List Algorithm-------------------
-    def generate_key(self):
-        self.key_list = np.round(self.p_list/(2*self.h)).astype(int)
-        #print(self.key_list)
-
-    def search_nearby_index(self, target_index):
-
-        relative_positions = np.array([
-            [0, 1], [0, -1], [1, 0], [-1, 0],
-            [1, 1], [1, -1], [-1, 1], [-1, -1],
-            [0, 0]
-        ])
-        
-        target_key = self.key_list[target_index]
-        nearby_keys = target_key + relative_positions
-        
-        # Use broadcasting to compare all keys at once
-        mask = (self.key_list[:, None] == nearby_keys).all(axis=2)
-        nearby_index_list = np.where(mask.any(axis=1))[0]
-
-
-        return nearby_index_list.tolist()
-    def nearby_index_list_cal(self):
-        self.nearby_index_list = [self.search_nearby_index(j) for j in range(0,self.particle_amount)]
-
 #-----------------Methods-------------------
     def distance_list_cal(self):
-        
-        self.generate_key()
-        self.nearby_index_list_cal()
-
+        self.index_map = _get_neighbor_cells(self.particle_amount, self.p_list, self.cell_size, self.cell_x)
 
         self.dvec_list = np.zeros([self.particle_amount,self.particle_amount,2])
         for i in range(0,self.particle_amount):
-            for j in self.nearby_index_list[i]:
+            for j in self.index_map[i]:
                 if j>i:
                     self.dvec_list[i][j]=self.p_list[j]-self.p_list[i]
         #main variables
@@ -124,7 +96,7 @@ class Simulation(Simattr):
 
         self.v_dif_list = np.zeros([self.particle_amount,self.particle_amount,2])
         for i in range(0,self.particle_amount):
-            for j in self.nearby_index_list[i]:
+            for j in self.index_map[i]:
                 if j>i:
                     self.v_dif_list[i][j]=self.v_list[j]-self.v_list[i]
 
@@ -139,7 +111,7 @@ class Simulation(Simattr):
         #pressure force
         self.rho_av_list = np.zeros([self.particle_amount,self.particle_amount])
         for i in range(0,self.particle_amount):
-            for j in self.nearby_index_list[i]:
+            for j in self.index_map[i]:
                 if j>i:
                     self.rho_av_list[i][j]=(self.sound_speed**2/self.gamma*(self.rho_list[i]**self.gamma+self.rho_list[j]**self.gamma-2))/(self.rho_list[i]*self.rho_list[j])
 
