@@ -1,1 +1,0 @@
-#SPyH FluidSim : Particle-Based Fluid Simulation on Python
