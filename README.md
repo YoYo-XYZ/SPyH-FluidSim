@@ -31,3 +31,42 @@ cd SPyH-FluidSim
 
 # Install dependencies (numpy, scipy, matplotlib are used)
 pip install numpy scipy matplotlib
+```
+
+# Quick Start
+You can set up and run a simple "water droplet" simulation with just a few lines of code. The following example initializes particles in a rectangle, configures the simulation, and generates a GIF of the result.
+
+from SPyH_FluidSim import Simulation, SimAttributes, ParticleAttributes, PhysicsAttributes, ParticleInitialize
+
+```python
+
+# 1. Define simulation attributes (boundary, timestep, duration)
+sim_config = SimAttributes(bound=[1.0, 1.0], collision_coefficient=0.8, Dt=0.01, substep=5, totaltime=4.0)
+
+# 2. Define physical properties of the fluid
+physics_config = PhysicsAttributes(GRAVITY=9.81, VISCOSITY=0.1, WATER_DENSITY=1000.0)
+
+# 3. Define particle and kernel properties
+# The support radius should be larger than the particle gap.
+particle_config = ParticleAttributes(support_radius=0.05, kernel_type='bspline')
+
+# 4. Initialize particle positions and velocities
+particles = ParticleInitialize(gap=0.02)
+particles.rectangle(width=0.8, length=0.4, center=[-0.5, 0.0], velocity=[0.0, 0.0])
+
+# 5. Initialize and run the simulation
+particle_config._initialize_particle(particles, physics_config)
+sim = Simulation(sim_config, particle_config)
+sim.update_fulltime(step_method='leapfrog')
+
+# 6. Create and save the animation
+anim = sim.create_anim()
+sim.save_anim(anim, "dam_break_simulation")
+```
+This script will produce an animation file named dam_break_simulation.gif in your project directory.
+
+# License
+This project is licensed under the MIT License. The software is provided "as is" without any warranty. In no event shall the authors be liable for any claim or damages.
+
+
+Copyright (c) 2025 Thammatorn Jamraschai.
