@@ -3,7 +3,7 @@
 ![Python Version](https://img.shields.io/badge/python-3.9+-blue.svg)
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
-[cite_start]SPyH FluidSim is a lightweight, 2D fluid simulation package based on the Smoothed-Particle Hydrodynamics (SPH) method[cite: 1]. It's designed to be a straightforward tool for simulating and visualizing fluid dynamics. The project's full name is "SPyH FluidSim".
+SPyH FluidSim is a lightweight, 2D fluid simulation package based on the Smoothed-Particle Hydrodynamics (SPH) method. It's designed to be a straightforward tool for simulating and visualizing fluid dynamics. The project's full name is "SPyH FluidSim".
 
 
 
@@ -33,7 +33,7 @@ cd SPyH-FluidSim
 pip install numpy scipy matplotlib
 ```
 
-# Quick Start
+## Quick Start
 You can set up and run a simple "water droplet" simulation with just a few lines of code. The following example initializes particles in a rectangle, configures the simulation, and generates a GIF of the result.
 
 from SPyH_FluidSim import Simulation, SimAttributes, ParticleAttributes, PhysicsAttributes, ParticleInitialize
@@ -65,7 +65,7 @@ sim.save_anim(anim, "dam_break_simulation")
 ```
 This script will produce an animation file named dam_break_simulation.gif in your project directory.
 
-# License
+## License
 This project is licensed under the MIT License. The software is provided "as is" without any warranty. In no event shall the authors be liable for any claim or damages.
 
 
