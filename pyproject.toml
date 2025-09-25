@@ -1,0 +1,19 @@
+[project]
+name = "SPyH FluidSim"
+version = "0.0.1"
+authors = [
+  { name="Thammatorn Jamraschai", email="thammatorn.j@gmail.com" },
+]
+description = "A 2D Smoothed-Particle-Hydrodynamics fluid simulations package"
+readme = "README.md"
+requires-python = ">=3.9"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+license = "MIT"
+license-files = ["LICEN[CS]E*"]
+
+[project.urls]
+Homepage = "https://github.com/YoYo-XYZ/SPyH-FluidSim"
+Issues = "https://github.com/YoYo-XYZ/SPyH-FluidSim/issues"
