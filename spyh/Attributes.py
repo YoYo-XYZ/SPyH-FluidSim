@@ -52,16 +52,3 @@ class SimAttributes():
 
         self.totaltime = totaltime
         self.frames = int(self.totaltime//self.Dt)
-
-if __name__ == "__main__":
-    from .ParticleInit import ParticleInitialize
-    points = ParticleInitialize(0.3)
-    points.rectangle(5,5)
-    particle = ParticleAttributes(0.3*1.3)
-    particle._initialize_particle(points)
-
-    import matplotlib.pyplot as plt
-    plt.scatter(particle.p_list[0], particle.p_list[1], label=f'particles number : {particle.particle_amount}')
-    plt.axis('equal')
-    plt.legend()
-    plt.show()

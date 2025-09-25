@@ -27,13 +27,3 @@ class ParticleInitialize():
     @property
     def area_cover(self):
         return self.particle_amount * (self.gap**2)
-    
-if __name__ == "__main__":
-    import matplotlib.pyplot as plt
-    particles = ParticleInitialize(0.3)
-    particles.rectangle(3, 3)
-    particles.rectangle(3, 6, center=[3,3])
-    plt.scatter(particles.p_list[0], particles.p_list[1], label=f'particles number : {particles.particle_amount}')
-    plt.axis('equal')
-    plt.legend()
-    plt.show()

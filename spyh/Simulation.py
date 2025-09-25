@@ -121,7 +121,7 @@ class Simulation():
                 transform=ax.transAxes, fontsize=5, alpha = 1,
                 bbox=dict(facecolor='white', alpha=0.0, edgecolor='none'))
         viscosity_text = ax.text(
-                0.02, 0.91, f'Viscosity{PhysicsAttributes.VISCOSITY}, Soundspeed: {PhysicsAttributes.SOUND_SPEED}',
+                0.02, 0.91, f'Viscosity{self.VISCOSITY}, Soundspeed: {self.SOUND_SPEED}',
                 transform=ax.transAxes, fontsize=5, alpha = 1,
                 bbox=dict(facecolor='white', alpha=0.0, edgecolor='none'))
 
@@ -141,25 +141,6 @@ class Simulation():
     def save_anim(self, anim, name):
         anim.save(f'{name}.gif',fps=5*1/self.Dt, writer='pillow')
         return anim
-
-if __name__ == "__main__":
-    
-    from ParticleInit import ParticleInitialize
-    points = ParticleInitialize(gap = 0.1)
-    points.rectangle(3,3)
-    particle = ParticleAttributes(0.1*1.5, 'bspline')
-    particle._initialize_particle(points)
-    print(particle.v_list.shape)
-
-    plt.scatter(particle.p_list[0], particle.p_list[1], label=f'particles number : {particle.particle_amount}')
-    plt.axis('equal')
-    plt.legend()
-    plt.show()
-
-    sim_config = SimAttributes(bound=[3,3],collision_coefficient=0.99, Dt=0.001, substep=10, totaltime=0.300)
-    sim = Simulation(sim_config, particle)
-    sim.update_fulltime('leapfrog')
-    anim = sim.create_anim()
 
 
 

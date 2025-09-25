@@ -134,21 +134,3 @@ class Calculation():
         self._get_rho_change()
         self._get_v_change()
         return self.rho_change_list, self.v_change_list
-
-if __name__ == "__main__":
-    from ParticleInit import ParticleInitialize
-    points = ParticleInitialize(0.3)
-    points.rectangle(5,5)
-    particle = ParticleAttributes(0.3*2)
-    particle._initialize_particle(points)
-
-    import matplotlib.pyplot as plt
-    plt.scatter(particle.p_list[0], particle.p_list[1], label=f'particles number : {particle.particle_amount}')
-    plt.axis('equal')
-    plt.legend()
-    plt.show()
-
-    cal = Calculation(particle)
-    rho_change_list, v_change_list = cal.getallchange()
-    print(cal.index_map)
-    print(v_change_list)
