@@ -1,8 +1,4 @@
 import numpy as np
-def count_particles(nparray):
-    """Count the number of particles."""
-    return len(nparray)
-
 class ParticleInitialize():
     def __init__(self, gap):
         self.gap = gap

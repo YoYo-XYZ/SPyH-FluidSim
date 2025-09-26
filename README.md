@@ -40,30 +40,33 @@ from SPyH_FluidSim import Simulation, SimAttributes, ParticleAttributes, Physics
 
 ```python
 
-# 1. Define simulation attributes (boundary, timestep, duration)
-sim_config = SimAttributes(bound=[1.0, 1.0], collision_coefficient=0.8, Dt=0.01, substep=5, totaltime=4.0)
+import spyh
 
-# 2. Define physical properties of the fluid
-physics_config = PhysicsAttributes(GRAVITY=9.81, VISCOSITY=0.1, WATER_DENSITY=1000.0)
+# 1. Define physical properties of the fluid
+physics = spyh.PhysicsAttributes(VISCOSITY=20, SOUND_SPEED=900)
 
-# 3. Define particle and kernel properties
-# The support radius should be larger than the particle gap.
-particle_config = ParticleAttributes(support_radius=0.05, kernel_type='bspline')
+# 2. Initialize particle positions and velocities
+points = spyh.ParticleInitialize(gap = 0.1)
+points.rectangle(3,3)
 
-# 4. Initialize particle positions and velocities
-particles = ParticleInitialize(gap=0.02)
-particles.rectangle(width=0.8, length=0.4, center=[-0.5, 0.0], velocity=[0.0, 0.0])
+# 4. Define particle and kernel properties
+# The support radius should be larger than the particle gap
+particle = spyh.ParticleAttributes(0.1*1.7, 'bspline')
+particle._initialize_particle(points, physics)
 
-# 5. Initialize and run the simulation
-particle_config._initialize_particle(particles, physics_config)
-sim = Simulation(sim_config, particle_config)
-sim.update_fulltime(step_method='leapfrog')
+# 5. Define simulation attributes (boundary, timestep, duration)
+sim_config = spyh.SimAttributes(bound=[3,3],collision_coefficient=0.99, Dt=0.004, substep=40, totaltime=0.400)
 
-# 6. Create and save the animation
+# 6. Run the simulation
+sim = spyh.Simulation(sim_config, particle)
+sim.update_fulltime('leapfrog')
+
+# 7. Create and save the animation
 anim = sim.create_anim()
-sim.save_anim(anim, "dam_break_simulation")
+sim.save_anim(anim,"droplet_simulation")
+
 ```
-This script will produce an animation file named dam_break_simulation.gif in your project directory.
+This script will produce an animation file named droplet_simulation.gif in your project directory.
 
 ## License
 This project is licensed under the MIT License. The software is provided "as is" without any warranty. In no event shall the authors be liable for any claim or damages.

@@ -72,18 +72,21 @@ class Simulation():
 
     def update_fulltime(self, step_method = 'simple2'):
         """Run the simulation for the specified number of frames."""
+        frames = self.frames
+        substep = self.substep
+
         self.step_method = step_method
         if self.is_setup:
-            self.substep = 1
-            self.frames = 1
+            substep = 1
+            frames = 1
 
         self.p_list_record = []
         self.v_list_record = []
         self.rho_list_record = []
 
-        for frame_idx in range(self.frames):
+        for frame_idx in range(frames):
             print(frame_idx)
-            for _ in range(self.substep):
+            for _ in range(substep):
                 self._integrate2()
                 self.timestepper[step_method]()
                 self._check_wall_collision()

@@ -62,7 +62,6 @@ class Calculation():
         
         kernel_data, gradkernel_data = self.kernel_func[self.kernel_type](R_ij_data)
 
-        # r_ij_data[r_ij_data == 0] = 1e-9
         x_ij_norm_data = x_ij_data/r_ij_data
         y_ij_norm_data = y_ij_data/r_ij_data
 
