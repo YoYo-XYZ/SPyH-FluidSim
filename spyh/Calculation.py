@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.sparse import csr_array
 from scipy.spatial import KDTree
-from .Attributes import PhysicsAttributes as ParticleAttributes
+from .attributes import PhysicsAttributes as ParticleAttributes
 
 def symmetrize_vector(array):
     """Return the antisymmetric part of a matrix."""

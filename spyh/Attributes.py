@@ -1,6 +1,6 @@
 import numpy as np
-from .ParticleInit import ParticleInitialize
-from .KernelFunc import *
+from .particleinit import ParticleInitialize
+from .kernelfunc import *
 class PhysicsAttributes():
     def __init__(self, GRAVITY=981.0, VISCOSITY=30, WATER_DENSITY=1.0, SOUND_SPEED=1000.0, GAMMA=7.0, REST_PRESSURE=0.0):
         """Physical constants and fluid properties."""
@@ -10,8 +10,7 @@ class PhysicsAttributes():
         self.SOUND_SPEED = SOUND_SPEED
         self.GAMMA = GAMMA
         self.REST_PRESSURE = REST_PRESSURE
-
-    def calculate_constants(self):
+    def _get_secondary_const(self):
         self.REST_DENSITY = self.WATER_DENSITY
         self.PRESSURE_CONSTANT = self.REST_DENSITY * self.SOUND_SPEED ** 2 / self.GAMMA
     

@@ -1,5 +1,5 @@
-from .Calculation import Calculation
-from .Attributes import SimAttributes, ParticleAttributes, PhysicsAttributes
+from .calculation import Calculation
+from .attributes import SimAttributes, ParticleAttributes, PhysicsAttributes
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib import animation

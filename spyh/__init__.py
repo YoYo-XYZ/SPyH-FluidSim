@@ -1,8 +1,8 @@
-from .Attributes import *
-from .Calculation import *
-from .KernelFunc import *
-from .ParticleInit import *
-from .Simulation import *
+from .attributes import *
+from .calculation import *
+from .kernelfunc import *
+from .particleinit import *
+from .simulation import *
 
 print("SPyH-FluidSim package loaded.")
 COLOR = "blue"
